@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Attend AI | Sri Dashmesh School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="authScreen" class="auth-screen">
+  <section class="auth-brand">
+    <div class="spark">✦</div><div class="school-name">SRI DASMESH<br>SCHOOL</div>
+    <div class="motto">DISCIPLINE | KNOWLEDGE | EXCELLENCE</div>
+    <div class="brand-bottom"><h1>Smart Attend <span>AI</span></h1><p>Smarter Attendance | Brighter Future</p><p>A simple and smart way to manage student attendance.</p></div>
+  </section>
+  <section class="auth-panel">
+    <div class="auth-form" id="loginForm">
+      <h2>Welcome Back!</h2><p class="muted">Sign in to continue to your attendance dashboard.</p>
+      <form id="loginFormEl">
+        <label>Email address or name</label><input id="loginIdentity" required placeholder="Enter your email or name" autocomplete="username">
+        <label>Password</label><input id="loginPassword" type="password" required placeholder="Enter your password" autocomplete="current-password">
+        <div class="auth-options"><label class="check-label"><input type="checkbox" id="rememberMe"> Remember me</label><button type="button" class="text-button" id="forgotBtn">Forgot password?</button></div>
+        <button class="primary wide" type="submit">Sign In →</button>
+      </form>
+      <p class="auth-switch">Don't have an account? <button class="text-button" id="showSignup">Create account</button></p>
+      <p class="tiny">This school project stores demo accounts and attendance data in this browser only.</p>
+    </div>
+    <div class="auth-form hidden" id="signupForm">
+      <h2>Create Account</h2><p class="muted">Create a teacher account for Smart Attend AI.</p>
+      <form id="signupFormEl">
+        <label>Full name</label><input id="signupName" required placeholder="Enter your full name">
+        <label>Email address</label><input id="signupEmail" type="email" required placeholder="name@example.com">
+        <label>Create password</label><input id="signupPassword" type="password" minlength="6" required placeholder="At least 6 characters">
+        <label>School password</label><input id="schoolPassword" type="password" required placeholder="Enter school password">
+        <button class="primary wide" type="submit">Create Account →</button>
+      </form>
+      <p class="auth-switch">Already registered? <button class="text-button" id="showLogin">Sign in</button></p>
+      <p class="tiny">School password is required to register.</p>
+    </div>
+  </section>
+</div>
+
+<div id="app" class="app hidden">
+  <header class="topbar">
+    <div><div class="top-school">SRI DASMESH SCHOOL</div><div class="top-motto">— DISCIPLINE | KNOWLEDGE | EXCELLENCE —</div></div>
+    <div class="date-box"><span class="calendar-icon">▦</span><div><small>Today's Date</small><strong id="todayDate"></strong></div></div>
+    <button id="mobileMenu" class="mobile-menu" aria-label="Toggle menu">☰</button>
+  </header>
+  <aside class="sidebar" id="sidebar">
+    <nav>
+      <button class="nav-item active" data-page="dashboard"><span>⌂</span>Dashboard</button>
+      <button class="nav-item" data-page="attendance"><span>▣</span>Attendance</button>
+      <button class="nav-item" data-page="students"><span>♟</span>Students</button>
+      <button class="nav-item reports-toggle" id="reportsToggle"><span>▤</span>Reports <b>⌄</b></button>
+      <div class="report-subnav" id="reportSubnav">
+        <button class="nav-item sub-item" data-page="daily"><span>▧</span>Daily</button>
+        <button class="nav-item sub-item" data-page="weekly"><span>▧</span>Weekly</button>
+        <button class="nav-item sub-item" data-page="monthly"><span>▧</span>Monthly</button>
+      </div>
+      <button class="nav-item" data-page="alerts"><span>♟</span>Alerts</button>
+    </nav>
+    <button class="logout-button" id="logoutBtn"><span>⇥</span> Logout</button>
+  </aside>
+  <main class="main-content" id="mainContent">
+    <section class="page active" id="page-dashboard"></section>
+    <section class="page" id="page-attendance"></section>
+    <section class="page" id="page-students"></section>
+    <section class="page" id="page-daily"></section>
+    <section class="page" id="page-weekly"></section>
+    <section class="page" id="page-monthly"></section>
+    <section class="page" id="page-alerts"></section>
+    <footer>“Small steps in attendance create big dreams in education.” <span>Smart Attend AI · School project</span></footer>
+  </main>
+</div>
+
+<div class="modal-backdrop hidden" id="studentModal">
+  <div class="modal">
+    <button class="modal-close" id="closeStudentModal" aria-label="Close">×</button>
+    <h2>♟ Add Student</h2><p class="muted">Enter the student details below. All fields are required.</p>
+    <form id="studentForm">
+      <div class="form-grid">
+        <div class="field full"><label>Student face photo * (clear, front-facing image)</label><input id="studentFacePhoto" type="file" accept="image/*" required><small class="tiny">Used to recognize this student during camera attendance. Use a photo with permission.</small></div>
+        <div class="field full"><label>Student full name *</label><input id="studentName" required placeholder="Enter student's full name"></div>
+        <div class="field"><label>Admission number *</label><input id="admissionNumber" required placeholder="e.g. SD2026001"></div>
+        <div class="field"><label>Roll number *</label><input id="rollNumber" required placeholder="e.g. 01"></div>
+        <div class="field"><label>Class *</label><select id="studentClass" required></select></div>
+        <div class="field"><label>Stream (Classes 11–12)</label><select id="studentStream"><option value="">Not applicable</option><option>Science</option><option>Commerce</option><option>Humanities</option></select></div>
+        <div class="field"><label>Section *</label><select id="studentSection" required><option value="">Select section</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+        <div class="field"><label>Father's phone number *</label><input id="fatherPhone" required inputmode="tel" pattern="[0-9+() -]{7,18}" placeholder="Enter phone number"></div>
+      </div>
+      <div class="modal-actions"><button type="button" class="secondary" id="cancelStudent">Cancel</button><button class="primary" type="submit">＋ Save Student</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="cameraModal">
+  <div class="modal camera-modal"><button class="modal-close" id="closeCamera">×</button><h2>AI Face Recognition Attendance</h2><p class="muted">Keep the camera at eye level. Enrolled students will be marked present when recognized.</p>
+    <video id="cameraVideo" autoplay muted playsinline></video><div id="cameraMessage" class="notice">Preparing face recognition models…</div><div id="cameraMatches" class="face-match-list"></div>
+    <p class="tiny">For this school-project demo, face photos and attendance are stored in this browser only. Use consented photos; this is not a production security system. Face recognition requires internet access to load its AI models and camera permission.</p>
+    <div class="modal-actions"><button class="secondary" id="stopCamera">Close camera</button><button class="primary" id="cameraDone" disabled>Finish & mark remaining absent</button></div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<script src="app.js"></script>
+</body></html>
