@@ -96,7 +96,11 @@
 
 <div class="modal-backdrop hidden" id="cameraModal">
   <div class="modal camera-modal"><button class="modal-close" id="closeCamera">×</button><h2>AI Face Recognition Attendance</h2><p class="muted">Keep the camera at eye level. Enrolled students will be marked present when recognized.</p>
-    <video id="cameraVideo" autoplay muted playsinline></video><div id="cameraMessage" class="notice">Preparing face recognition models…</div><div id="cameraMatches" class="face-match-list"></div>
+    <div class="camera-stage">
+  <video id="cameraVideo" autoplay muted playsinline></video>
+  <canvas id="faceOverlay"></canvas>
+  </div>
+    <div id="cameraMessage" class="notice">Preparing face recognition models…</div><div id="cameraMatches" class="face-match-list"></div>
     <p class="tiny">For this school-project demo, face photos and attendance are stored in this browser only. Use consented photos; this is not a production security system. Face recognition requires internet access to load its AI models and camera permission.</p>
     <div class="modal-actions"><button class="secondary" id="stopCamera">Close camera</button><button class="primary" id="cameraDone" disabled>Finish & mark remaining absent</button></div>
   </div>
