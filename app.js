@@ -80,4 +80,21 @@ function renderAlertGroups(){let c=$('#alertClass')?.value||'All',q=($('#alertSe
 function renderPage(page){if(page==='dashboard')renderDashboard();if(page==='attendance')renderAttendance();if(page==='students')renderStudents();if(['daily','weekly','monthly'].includes(page))renderReport(page);if(page==='alerts')renderAlerts()}
 seed();fillClassSelect($('#studentClass'));$('#studentClass').onchange=updateStreams;
 // Always show the login page when the site is opened or refreshed. Keep saved accounts and student data, but do not silently bypass sign-in.
-localStorage.removeItem(STORE.session);currentUser=null;showAuth('login');
+seed();
+fillClassSelect($('#studentClass'));
+$('#studentClass').onchange = updateStreams;
+
+// Restore the previous login session when the website reopens.
+const savedSession = read(STORE.session, null);
+
+if (savedSession && savedSession.email && savedSession.name) {
+    currentUser = savedSession;
+    $('#authScreen').classList.add('hidden');
+    $('#app').classList.remove('hidden');
+    $('#todayDate').textContent = dateLabel();
+    renderAll();
+    goPage('dashboard');
+} else {
+    currentUser = null;
+    showAuth('login');
+}
