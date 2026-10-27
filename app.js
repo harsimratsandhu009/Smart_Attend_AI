@@ -122,7 +122,7 @@ async function function drawFaceBoxes(detections) {
         ctx.fillText(label, box.x + 8, labelY + 18);
     }
 }
-scanCameraFrame(){if(faceScanBusy||!cameraStream||!faceModelsReady)return;const video=$('#cameraVideo');if(video.readyState<2)return;faceScanBusy=true;try{const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptors();for(const det of detections){let best=null,bestDistance=Infinity;for (const ref of faceDescriptors) {
+scanCameraFrame(){if(faceScanBusy||!cameraStream||!faceModelsReady)return;const video=$('#cameraVideo');if(video.readyState<2)return;faceScanBusy=true;try{const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptors();for(const det of detections){let best=null,bestDistance=Infinity;for (const ref of faceDescriptors) drawFaceBoxes(detections);{
     // Don't match a new face to a student already marked present
     // during this camera session.
     if (recognizedIds.has(ref.id)) continue;
