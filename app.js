@@ -68,7 +68,61 @@ function registerFacePhoto(id){const input=document.createElement('input');input
 async function ensureFaceModels(){if(faceModelsReady)return;if(!window.faceapi)throw new Error('Face recognition library did not load. Check your internet connection and reload the page.');const base='https://justadudewhohacks.github.io/face-api.js/models';await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(base),faceapi.nets.faceLandmark68Net.loadFromUri(base),faceapi.nets.faceRecognitionNet.loadFromUri(base)]);faceModelsReady=true}
 async function makeReferenceDescriptors(){const list=orderedStudents().filter(s=>s.photo);const refs=[];for(const s of list){try{const img=await faceapi.fetchImage(s.photo);const result=await faceapi.detectSingleFace(img,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.45})).withFaceLandmarks().withFaceDescriptor();if(result)refs.push({id:s.id,name:s.name,descriptor:result.descriptor});}catch(e){console.warn('Could not process face photo for',s.name,e)}}return refs}
 async function openCamera(){recognizedIds=new Set();faceDescriptors=[];$('#cameraDone').disabled=true;$('#cameraMatches').innerHTML='';$('#cameraModal').classList.remove('hidden');$('#cameraMessage').textContent='Loading AI face-recognition models…';try{await ensureFaceModels();faceDescriptors=await makeReferenceDescriptors();if(!faceDescriptors.length){$('#cameraMessage').textContent='No usable face photos found. Open Students → Register face for each student, using a clear front-facing photo, then try again.';return}const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});cameraStream=stream;$('#cameraVideo').srcObject=stream;await $('#cameraVideo').play();$('#cameraMessage').textContent=`AI ready. ${faceDescriptors.length} face photo(s) enrolled. Looking for known students…`;$('#cameraDone').disabled=false;faceScanTimer=setInterval(scanCameraFrame,850)}catch(err){$('#cameraMessage').textContent=err.message||'Camera unavailable or permission denied. Run on localhost/HTTPS and allow camera access.'}}
-async function scanCameraFrame(){if(faceScanBusy||!cameraStream||!faceModelsReady)return;const video=$('#cameraVideo');if(video.readyState<2)return;faceScanBusy=true;try{const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptors();for(const det of detections){let best=null,bestDistance=Infinity;for (const ref of faceDescriptors) {
+async function function drawFaceBoxes(detections) {
+    const video = $('#cameraVideo');
+    const canvas = $('#faceOverlay');
+
+    if (!video.videoWidth || !video.videoHeight) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const det of detections) {
+        const box = det.detection.box;
+        let best = null;
+        let bestDistance = Infinity;
+
+        for (const ref of faceDescriptors) {
+            const distance = faceapi.euclideanDistance(
+                det.descriptor,
+                ref.descriptor
+            );
+
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                best = ref;
+            }
+        }
+
+        const matched = best && bestDistance < 0.48;
+        const student = matched
+            ? students().find(s => s.id === best.id)
+            : null;
+
+        ctx.strokeStyle = matched ? '#42d392' : '#ff6262';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(box.x, box.y, box.width, box.height);
+
+        const label = student
+            ? `${student.name} (${student.admissionNumber})`
+            : 'Unknown Student';
+
+        ctx.font = 'bold 15px Arial';
+
+        const labelWidth = ctx.measureText(label).width + 16;
+        const labelY = Math.max(0, box.y - 30);
+
+        ctx.fillStyle = matched ? '#176b45' : '#9b3030';
+        ctx.fillRect(box.x, labelY, labelWidth, 26);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(label, box.x + 8, labelY + 18);
+    }
+}
+scanCameraFrame(){if(faceScanBusy||!cameraStream||!faceModelsReady)return;const video=$('#cameraVideo');if(video.readyState<2)return;faceScanBusy=true;try{const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptors();for(const det of detections){let best=null,bestDistance=Infinity;for (const ref of faceDescriptors) {
     // Don't match a new face to a student already marked present
     // during this camera session.
     if (recognizedIds.has(ref.id)) continue;
