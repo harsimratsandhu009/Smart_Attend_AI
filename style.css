@@ -3,3 +3,26 @@
 @media(max-width:760px){.auth-screen{grid-template-columns:1fr;padding:0}.auth-brand{min-height:auto;border-radius:0;padding:25px}.auth-panel{min-height:65vh;border-radius:0;padding:28px}.school-name{font-size:27px}.brand-bottom{margin-top:20px}.brand-bottom h1{font-size:30px}.brand-bottom p{font-size:14px}.spark{font-size:28px}.topbar{height:auto;min-height:78px;padding:12px 15px}.top-school{font-size:19px}.top-motto{font-size:8px;letter-spacing:1px}.date-box{display:none}.mobile-menu{display:block}.sidebar{display:none;top:75px;left:10px;bottom:10px;width:245px}.sidebar.mobile-open{display:flex}.main-content{margin:0;padding:16px 12px}.page-heading,.alert-head{align-items:flex-start;flex-direction:column}.page-heading h1{font-size:28px}.hero-card{align-items:flex-start;flex-direction:column;padding:18px}.hero-card h2{font-size:25px}.hero-brand{border-left:0;border-top:1px solid var(--line);padding:12px 0 0;white-space:normal}.stats-grid{gap:9px}.stat-card{padding:12px}.stat-value{font-size:24px}.donut-row{flex-direction:column;padding:10px}.donut{width:160px;height:160px}.donut:after{width:115px;height:115px}.filters{grid-template-columns:1fr 1fr;padding:12px;gap:10px}.filters .go-button{grid-column:1/-1}.attendance-toolbar{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.modal{padding:23px 17px}.report-actions{width:100%}.report-actions button{flex:1}footer{flex-direction:column}.summary-strip{gap:12px}.search-input{max-width:100%;width:100%}.alert-count{width:100%}.panel{padding:12px}th,td{padding:9px 10px}}
 @media print{.topbar,.sidebar,.page-heading .report-actions,.filters,.toolbar-actions,footer,.no-print{display:none!important}.main-content{margin:0;padding:0}.page{display:none!important}.page.active{display:block!important}.panel,.filter-panel{box-shadow:none;border:0}.table-wrap{max-height:none;overflow:visible}body{background:white}.report-period{border:0}}
 .face-match-list{display:grid;gap:7px;margin-top:10px;max-height:130px;overflow:auto}.face-match{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:#e8f5e5;color:#175d25;font-size:13px}.face-match small{margin-left:auto;color:#47754d}.tiny{overflow-wrap:anywhere}#studentFacePhoto{padding:9px;background:#fff7ed;border:1px dashed #c89a78;border-radius:8px;width:100%}
+.camera-stage {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #171717;
+}
+
+.camera-stage video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#faceOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
